@@ -8,7 +8,7 @@ import tensorflow as tf
 class SnakeCNN(tf.keras.Model):
     """
     Base CNN feature extractor for Snake.
-    Input: (batch, H, W, channels=4) — one-hot encoded board (channels-last)
+    Input: (batch, H, W, channels=4)
     Output: (batch, 128) feature vector
     """
 

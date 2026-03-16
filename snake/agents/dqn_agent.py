@@ -183,8 +183,7 @@ class DQNAgent:
         else:
             nm_t = tf.ones((self.batch_size, self.n_actions), dtype=tf.float32)
 
-        loss = self._train_step_compiled(states_t, actions_t, rewards_t,
-                                          next_states_t, nm_t)
+        loss = self._train_step_compiled(states_t, actions_t, rewards_t, next_states_t, nm_t)
 
         # Periodically update target network
         self.train_step += 1
@@ -194,8 +193,7 @@ class DQNAgent:
         return loss.numpy()
 
     @tf.function
-    def _train_step_compiled(self, states_t, actions_t, rewards_t,
-                              next_states_t, nm_t):
+    def _train_step_compiled(self, states_t, actions_t, rewards_t, next_states_t, nm_t):
         """Compiled training step (tf.function for graph-mode speed)."""
         # Double DQN: select best action with online net, evaluate with target net
         next_q_online = self.q_network(next_states_t, training=False)
@@ -223,8 +221,7 @@ class DQNAgent:
 
     def _update_target_network(self):
         """Polyak averaging: θ_target = τ·θ + (1-τ)·θ_target."""
-        for target_var, var in zip(self.target_network.trainable_variables,
-                                    self.q_network.trainable_variables):
+        for target_var, var in zip(self.target_network.trainable_variables, self.q_network.trainable_variables):
             target_var.assign(self.tau * var + (1 - self.tau) * target_var)
 
     def save(self, filepath):

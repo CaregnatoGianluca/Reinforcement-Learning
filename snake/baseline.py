@@ -220,6 +220,7 @@ def run_baseline(env, n_steps=1000, verbose=True, partially_observable=False, ma
     fruits_eaten = 0
     wall_hits = 0
     self_hits = 0
+    wins = 0
     
     iterator = trange(n_steps, desc="Baseline (BFS)") if verbose else range(n_steps)
     
@@ -241,6 +242,7 @@ def run_baseline(env, n_steps=1000, verbose=True, partially_observable=False, ma
         fruits_eaten += np.sum(rewards_np == 0.5)
         wall_hits += np.sum(rewards_np == -0.1)
         self_hits += np.sum(rewards_np == -0.2)
+        wins += np.sum(rewards_np == 1.0)
         
         if verbose and step % 100 == 0:
             iterator.set_postfix({
@@ -256,6 +258,7 @@ def run_baseline(env, n_steps=1000, verbose=True, partially_observable=False, ma
         'fruits_eaten': int(fruits_eaten),
         'wall_hits': int(wall_hits),
         'self_hits': int(self_hits),
+        'wins': int(wins),
     }
     
     return results
@@ -273,7 +276,7 @@ def main():
     n_steps = 1000
     board_size = 7
     
-    # --- Fully Observable ---
+    # Fully Observable
     print(f"\n{'='*60}")
     print(f"Fully Observable Environment ({n_boards} boards, {n_steps} steps)")
     print(f"{'='*60}")
@@ -283,7 +286,7 @@ def main():
     print(f"  Fruits Eaten:    {results_full['fruits_eaten']}")
     print(f"  Wall Hits:       {results_full['wall_hits']}")
     
-    # --- Partially Observable ---
+    # Partially Observable
     print(f"\n{'='*60}")
     print(f"Partially Observable Environment ({n_boards} boards, {n_steps} steps)")
     print(f"{'='*60}")
@@ -294,15 +297,6 @@ def main():
     print(f"\n  Average Reward:  {results_partial['avg_reward']:.4f}")
     print(f"  Fruits Eaten:    {results_partial['fruits_eaten']}")
     print(f"  Wall Hits:       {results_partial['wall_hits']}")
-    
-    # --- Summary ---
-    print(f"\n{'='*60}")
-    print(f"SUMMARY")
-    print(f"{'='*60}")
-    print(f"  {'Environment':<30} {'Avg Reward':>12} {'Fruits':>8} {'Wall Hits':>10}")
-    print(f"  {'-'*60}")
-    print(f"  {'Fully Observable':<30} {results_full['avg_reward']:>12.4f} {results_full['fruits_eaten']:>8} {results_full['wall_hits']:>10}")
-    print(f"  {'Partially Observable':<30} {results_partial['avg_reward']:>12.4f} {results_partial['fruits_eaten']:>8} {results_partial['wall_hits']:>10}")
     
     return results_full, results_partial
 
